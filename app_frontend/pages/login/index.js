@@ -143,6 +143,10 @@ export default function Login() {
                                 <label>Password:</label>
                                 <input name="password" type="password" required />
                             </div>
+                            <div>
+                                <label>Password:</label>
+                                <input name="password" type="password" required />
+                            </div>
                         </div>
                         <div className="action">
                             <button className="login" type="submit">เข้าสู่ระบบ</button>
