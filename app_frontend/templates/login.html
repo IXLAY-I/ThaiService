@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="container">
+        <form method="POST" class="content">
+            {% csrf_token %}
+            <div class="topic">Login</div>
+            <div class="input_all">
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="text" name="email" id="email" required>
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+            </div>
+            <div class="action">
+                <button class="login" type="submit">เข้าสู่ระบบ</button>
+                <a href="{% url 'register' %}">
+                    <button class="create" type="button">สร้างบัญชีใหม่</button>
+                </a>
+            </div>
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li style="color:red">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>
