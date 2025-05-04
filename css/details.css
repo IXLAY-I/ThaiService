@@ -22,8 +22,74 @@ body{
     height: 40vw;
     background-color: rgb(217, 217, 217);
     display: flex;
-    flex-direction: column;
     align-items: center;
     border-radius: 20px;
     padding: 3vw;
+}
+
+.picture {
+    width: 50%;
+}
+
+.details {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.details h1 {
+    font-size: 2vw;
+    display: flex;
+    justify-content: center;
+}
+
+.details div {
+    padding-left: 4vw;
+    padding-right: 4vw;
+    font-size: 1vw;
+}
+
+.action {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.action button {
+    border: none;
+    border-radius: 20px;
+    width: 5vw;
+    height: 3vw;
+    color: white;
+    font-size: 1vw;
+}
+
+.cancle {
+    background-color: rgb(255, 67, 67);
+    -webkit-transition-duration: .3s;
+    transition-duration: .3s;
+    -webkit-transition-property: box-shadow, transform;
+    transition-property: box-shadow, transform;
+}
+
+.cancle:hover {
+    background-color: rgb(218, 59, 59);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.create {
+    background-color: rgb(104, 177, 245);
+    -webkit-transition-duration: .3s;
+    transition-duration: .3s;
+    -webkit-transition-property: box-shadow, transform;
+    transition-property: box-shadow, transform;
+}
+
+.create:hover {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+    background-color: rgb(81, 144, 202);
 }

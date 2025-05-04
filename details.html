@@ -10,10 +10,51 @@
     <div class="container">
         <div class="content">
             <div class="picture">
-                <img src="/img/somchai.png" alt="">
+                <img src="/img/somchai.png" style="width: 100%;">
             </div>
             <div class="details">
-                <div></div>
+                <h1>สมชาย</h1>
+                <div>
+                    <label>นิสัย:</label>
+                    <p>น่ารัก, เอาใจเก่ง, ไม่งี้เง่า, อารมณ์ดี</p>
+                </div>
+                <div>
+                    <label>สิ่งที่ชอบ:</label>
+                    <p>ของหวาน, อ่านนิยาย</p>
+                </div>
+                <div>
+                    <label>ความสามารถ:</label>
+                    <p>ทำงานบ้านได้, ทำอาหารอร่อย</p>
+                </div>
+                <div>
+                    <label>สถานที่:</label>
+                    <input type="radio" name="location" checked>สถานที่จัดเตรียมไว้
+                    <input type="radio" name="location">บ้านคุณ(+1000฿)
+                </div>
+                <div>
+                    <label>เลือกระยะเวลา:</label>
+                    <select name="duration" required>
+                        <option value="">-- เลือกระยะเวลา --</option>
+                        <option value="1">1 ชั่วโมง</option>
+                        <option value="2">2 ชั่วโมง</option>
+                        <option value="3">3 ชั่วโมง</option>
+                        <option value="4">4 ชั่วโมง</option>
+                        <option value="5">5 ชั่วโมง</option>
+                        <option value="6">6 ชั่วโมง</option>
+                        <option value="7">7 ชั่วโมง</option>
+                        <option value="8">8 ชั่วโมง</option>
+                    </select>
+                </div>
+                <div>
+                    <label>ราคารวม:</label>
+                    <p>7000</p>
+                </div>
+                <div class="action">
+                    <a href="homepage.html">
+                        <button class="cancle" type="button">ยกเลิก</button>
+                    </a>
+                    <button class="create" type="submit">ยืนยัน</button>
+                </div>
             </div>
         </div>
     </div>
