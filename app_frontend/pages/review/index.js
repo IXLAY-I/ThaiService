@@ -3,15 +3,14 @@ import { useEffect } from 'react';
 
 export default function ReviewPage() {
   useEffect(() => {
-    window.showSidebar = function () {
-      document.querySelector('.sidebar').style.display = 'flex';
-    };
-    window.hideSidebar = function () {
-      document.querySelector('.sidebar').style.display = 'none';
-    };
+    // window.showSidebar = function () {
+    //   document.querySelector('.sidebar').style.display = 'flex';
+    // };
+    // window.hideSidebar = function () {
+    //   document.querySelector('.sidebar').style.display = 'none';
+    // };
     window.logout = function () {
       alert('Logged out!');
-      // ใส่ logout logic ที่นี่ เช่นล้าง token, redirect, etc.
     };
   }, []);
 
@@ -23,7 +22,7 @@ export default function ReviewPage() {
       </Head>
 
       <nav>
-        <ul className="sidebar">
+        {/* <ul className="sidebar">
           <li onClick={() => window.hideSidebar()}>
             <a>
               <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#5f6368">
@@ -34,7 +33,7 @@ export default function ReviewPage() {
           <li><a href="/homepage">Homepage</a></li>
           <li><a href="/review">Review</a></li>
           <li><a onClick={() => window.logout()} href="/login">Log out</a></li>
-        </ul>
+        </ul> */}
         <ul>
           <li><a>ThaiService</a></li>
           <li><a className="hidetext" href="/homepage">Homepage</a></li>
@@ -74,7 +73,6 @@ export default function ReviewPage() {
           </table>
         </div>
       </div>
-
       <style jsx>{`
         * {
           margin: 0;
