@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from '@/styles/homepage.module.css';
+import '@/styles/homepage.css';
 import { useState } from 'react';
 
 export default function HomePage() {
@@ -30,7 +30,7 @@ export default function HomePage() {
         />
       </Head>
       <nav>
-        <ul className={styles.sidebar}> {/* ใช้ class จาก CSS Module */}
+        <ul className="sidebar">
           <li onClick={() => window.hideSidebar()}>
             <a>
               <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#5f6368">
@@ -47,7 +47,7 @@ export default function HomePage() {
           <li><a className="hidetext" href="/homepage">Homepage</a></li>
           <li><a className="hidetext" href="/review">Review</a></li>
           <li><a className="hidetext" onClick={() => window.logout()} href="/login">Log out</a></li>
-          <li className={styles.menuButton} onClick={() => window.showSidebar()}>
+          <li className="menu-button" onClick={() => window.showSidebar()}>
             <a>
               <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#5f6368">
                 <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>
@@ -59,7 +59,7 @@ export default function HomePage() {
 
       <main className="container mt-5">
         <div className="row mb-5">
-          <div className={`col-md-4 ${styles.bgLight} p-4 rounded`}>
+          <div className="col-md-4 bg-light p-4 rounded">
             <h3>ติดต่อสอบถามเพิ่มเติม</h3>
             <p>เช่าบริการได้ง่าย เริ่มต้นเพียง 1,000 บาท</p>
             <input className="form-control mb-2" placeholder="เขียนรีวิวของคุณ" />
@@ -107,7 +107,7 @@ export default function HomePage() {
         </div>
 
         <div className="my-5">
-          <div className={`bg-light p-3 rounded ${styles.bgLight}`}>
+          <div className="bg-light p-3 rounded">
             <input
               type="search"
               className="form-control mb-3"
