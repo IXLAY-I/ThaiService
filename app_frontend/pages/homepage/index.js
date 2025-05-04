@@ -28,7 +28,7 @@ export default function HomePage() {
       </Head>
 
       <nav>
-        <ul className="sidebar">
+        {/* <ul className="sidebar">
           <li onClick={() => window.hideSidebar()}>
             <a>
               <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#5f6368">
@@ -39,19 +39,19 @@ export default function HomePage() {
           <li><a href="/homepage">Homepage</a></li>
           <li><a href="/review">Review</a></li>
           <li><a onClick={() => window.logout()} href="/login">Log out</a></li>
-        </ul>
+        </ul> */}
         <ul>
           <li><a>ThaiService</a></li>
           <li><a className="hidetext" href="/homepage">Homepage</a></li>
           <li><a className="hidetext" href="/review">Review</a></li>
           <li><a className="hidetext" onClick={() => window.logout()} href="/login">Log out</a></li>
-          <li className="menu-button" onClick={() => window.showSidebar()}>
+          {/* <li className="menu-button" onClick={() => window.showSidebar()}>
             <a>
               <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#5f6368">
                 <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>
               </svg>
             </a>
-          </li>
+          </li> */}
         </ul>
       </nav>
 
@@ -212,7 +212,7 @@ export default function HomePage() {
         }
 
         nav li {
-          height: 70px;
+          height: 7vh;
         }
 
         nav a {
@@ -227,10 +227,6 @@ export default function HomePage() {
 
         nav ul:first-child a:hover {
           background-color: #f0f0f076;
-        }
-
-        nav a:hover {
-          background-color: rgb(255, 218, 34);
         }
 
         nav li:first-child {

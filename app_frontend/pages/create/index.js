@@ -1,37 +1,76 @@
 import Head from 'next/head';
 
 export default function CreatePage() {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const isValid = formData.username && formData.email && formData.password;
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!isValid) {
+      alert("Please fill in all information completely.");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3342/api/register/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        alert('Create Success!');
+        window.location.href = '/login';
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message || 'cannot create acoount.'}`);
+      }
+    } catch (error) {
+      alert('Cannnot connected server');
+    }
+  }
   return (
     <>
       <Head>
         <title>Create Account</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <div className="container">
+      <form onSubmit={handleSubmit} className="w-screen h-screen flex justify-center items-center">
         <div className="content">
           <div className="topic">Create Account</div>
           <div className="input_all">
             <div>
               <label>Username:</label>
-              <input type="text" />
+              <input type="text" value={formData.username} onChange={handleChange} />
             </div>
             <div>
               <label>Email:</label>
-              <input type="text" />
+              <input type="text" value={formData.email} onChange={handleChange} />
             </div>
             <div>
               <label>Password:</label>
-              <input type="password" />
+              <input type="password" value={formData.password} onChange={handleChange} />
             </div>
           </div>
           <div className="action">
             <a href="/login">
               <button className="cancle" type="button">ยกเลิก</button>
             </a>
-            <button className="create" type="submit">ยืนยัน</button>
+            <button className="create" type="submit" disabled={!isValid}>ยืนยัน</button>
           </div>
         </div>
-      </div>
+      </form>
 
       <style jsx>{`
         * {
@@ -45,8 +84,9 @@ export default function CreatePage() {
           overflow-x: hidden;
         }
 
-        .container {
-          height: 50vw;
+        form {
+          width: 100vw;
+          height: 100vh;
           display: flex;
           justify-content: center;
           align-items: center;

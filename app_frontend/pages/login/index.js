@@ -32,6 +32,30 @@ export default function Login() {
                 <title>Login</title>
             </Head>
 
+            <main>
+                <form onSubmit={onLogin} className="w-screen h-screen flex justify-center items-center">
+                    <div className="content">
+                        <div className="topic">Login</div>
+                        <div className="input_all">
+                            <div>
+                                <label>Email:</label>
+                                <input name="username" type="text" required />
+                            </div>
+                            <div>
+                                <label>Password:</label>
+                                <input name="password" type="password" required />
+                            </div>                          
+                        </div>
+                        <div className="action">
+                            <button className="login" type="submit">เข้าสู่ระบบ</button>
+                            <a href="/create">
+                                <button className="create" type="button">สร้างบัญชีใหม่</button>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </main>
+
             <style jsx>{`
                 * {
                     margin: 0;
@@ -44,8 +68,9 @@ export default function Login() {
                     overflow-x: hidden;
                 }
 
-                .container {
-                    height: 50vw;
+                form {
+                    width: 100vw;
+                    height: 100vh;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -129,30 +154,6 @@ export default function Login() {
                     background-color: rgb(81, 144, 202);
                 }
             `}</style>
-
-            <main>
-                <form onSubmit={onLogin} className="container">
-                    <div className="content">
-                        <div className="topic">Login</div>
-                        <div className="input_all">
-                            <div>
-                                <label>Email:</label>
-                                <input name="username" type="text" required />
-                            </div>
-                            <div>
-                                <label>Password:</label>
-                                <input name="password" type="password" required />
-                            </div>                          
-                        </div>
-                        <div className="action">
-                            <button className="login" type="submit">เข้าสู่ระบบ</button>
-                            <a href="/create">
-                                <button className="create" type="button">สร้างบัญชีใหม่</button>
-                            </a>
-                        </div>
-                    </div>
-                </form>
-            </main>
         </>
     );
 }
