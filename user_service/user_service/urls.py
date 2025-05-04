@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 from user_management.views import *
 from user_management import views
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import path
 from rest_framework_simplejwt.views import (
  TokenObtainPairView,
  TokenRefreshView,
@@ -30,4 +33,5 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/myinfo', CustomerView.as_view(), name="myinfo"),
-]
+    path('api/employees/', EmployeeListView.as_view(), name='employee-list'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

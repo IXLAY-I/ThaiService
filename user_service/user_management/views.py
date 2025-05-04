@@ -46,4 +46,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     serializer_class = EmployeeSerializer
     
 
-
+class EmployeeListView(APIView):
+    def get(self, request, format=None):
+        employees = Employee.objects.all()
+        serializer = EmployeeSerializer(employees, many=True)
+        return Response(serializer.data)
