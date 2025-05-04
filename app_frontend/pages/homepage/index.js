@@ -8,11 +8,12 @@ export default function HomePage() {
   const tableData = [
     { img: '/img/somchai.png', name: 'สมชาย', status: 'ไม่ว่าง', review: '5/5', price: '5000฿' },
     { img: '/img/sommai.png', name: 'สมหมาย', status: 'ว่าง', review: '5/5', price: '2000฿' },
+    { img: '/img/somsri.png', name: 'สมศรี', status: 'ว่าง', review: '4.9/5', price: '3500฿' },
   ];
 
   const filteredData = tableData.filter(row =>
     Object.values(row).some(val =>
-      val.toLowerCase().includes(searchTerm.toLowerCase())
+      val.toLowerCase ? val.toLowerCase().includes(searchTerm.toLowerCase()) : false
     )
   );
 
@@ -21,14 +22,9 @@ export default function HomePage() {
       <Head>
         <title>Homepage</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-        />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
       </Head>
 
       <nav>
@@ -62,7 +58,7 @@ export default function HomePage() {
       <main className="container mt-5">
         <div className="row mb-5">
           <div className="col-md-4 bg-light p-4 rounded">
-            <h3>ติดต่อสอบถามเพิ่มเติม</h3>
+            <h3 style={{ fontSize: '1.5vw' }}>ติดต่อสอบถามเพิ่มเติม</h3>
             <p>เช่าบริการได้ง่าย เริ่มต้นเพียง 1,000 บาท</p>
             <input className="form-control mb-2" placeholder="เขียนรีวิวของคุณ" />
             <button className="btn btn-primary w-100">
@@ -76,7 +72,7 @@ export default function HomePage() {
             </ul>
           </div>
           <div className="col-md-8">
-            <h2>บริการที่เหนือความคาดหวัง คือกุญแจสู่หัวใจลูกค้า</h2>
+            <h2 style={{ fontSize: '2vw' }}>บริการที่เหนือความคาดหวัง คือกุญแจสู่หัวใจลูกค้า</h2>
             <div id="carouselExample" className="carousel slide" data-bs-ride="carousel">
               <div className="carousel-inner">
                 <div className="carousel-item active">
@@ -99,49 +95,94 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="my-5">
-          <h1>Top Employees</h1>
-          <div className="d-flex justify-content-between">
-            {[1,2,3,4,5].map(i => (
-              <Image key={i} src={`/img/top${i}.png`} width={100} height={100} className="rounded-circle" alt={`Top ${i}`} />
-            ))}
-          </div>
+        <div className="middle">
+            <h1>Top Employees</h1>
+            <div className="pic_top">
+                <div>
+                    <img src="/img/top1.png" style={{ width: '8vw' }} />
+                </div>
+                <div>
+                    <img src="/img/top2.png" style={{ width: '8vw' }} />
+                </div>
+                <div>
+                    <img src="/img/top3.png" style={{ width: '8vw' }} />
+                </div>
+                <div>
+                    <img src="/img/top4.png" style={{ width: '8vw' }} />
+                </div>
+                <div>
+                    <img src="/img/top5.png" style={{ width: '8vw' }} />
+                </div>
+            </div>
         </div>
 
-        <div className="my-5">
-          <div className="bg-light p-3 rounded">
+          <div className="Main_Banner">
+            <div id="MainBanner" className="carousel slide" data-ride="carousel">
+                <ol className="carousel-indicators">
+                    <li data-target="#MainBanner" data-slide-to="0" className="active"></li>
+                    <li data-target="#MainBanner" data-slide-to="1"></li>
+                    <li data-target="#MainBanner" data-slide-to="2"></li>
+                </ol>
+
+                <div className="carousel-inner">
+                    <div className="carousel-item active">
+                        <img src="/img/main1.png" style={{ width: '100%', height: '8vw' }} />
+                    </div>
+                    <div className="carousel-item">
+                        <img src="/img/main2.png" style={{ width: '100%', height: '8vw' }} />
+                    </div>
+                    <div className="carousel-item">
+                        <img src="/img/main3.png" style={{ width: '100%', height: '8vw' }} />
+                    </div>
+                </div>
+
+                <a className="carousel-control-prev" href="#MainBanner" role="button" data-slide="prev">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Previous</span>
+                </a>
+                <a className="carousel-control-next" href="#MainBanner" role="button" data-slide="next">
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+
+          <div className="Product">
+          <div className="BoxSearch">
             <input
               type="search"
-              className="form-control mb-3"
-              placeholder="Search For Topics..."
+              placeholder="Search For Topics...."
               value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <table className="table text-center table-bordered">
-              <thead className="table-dark">
-                <tr>
-                  <th>รูป</th>
-                  <th>ชื่อ</th>
-                  <th>สถานะ</th>
-                  <th>รีวิว</th>
-                  <th>ราคาต่อ ชม.</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData.map((row, idx) => (
-                  <tr key={idx}>
-                    <td><Image src={row.img} width={40} height={40} className="rounded-circle" alt={row.name} /></td>
-                    <td>{row.name}</td>
-                    <td>{row.status}</td>
-                    <td>{row.review}</td>
-                    <td>{row.price}</td>
+          </div>
+          <div className="BoxForumMain">
+            <div className="Forum">
+              <table id="myTable" className="section-room">
+                <thead>
+                  <tr>
+                    <th>รูป</th>
+                    <th>ชื่อ</th>
+                    <th>สถานะ</th>
+                    <th>รีวิว</th>
+                    <th>ราคาต่อ ชม.</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredData.map((employee, index) => (
+                    <tr key={index}>
+                      <td><img className="list_image" src={employee.img} alt={employee.name} /></td>
+                      <td>{employee.name}</td>
+                      <td>{employee.status}</td>
+                      <td>{employee.review}</td>
+                      <td>{employee.price}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
       </main>
 
       <style jsx global>{`
@@ -234,10 +275,7 @@ export default function HomePage() {
             border: 0.15vw solid rgb(99, 99, 99);
             border-radius: 20px;
             width: 1vw;
-        }
-
-        .contact h3 {
-            font-size: 1.5vw;
+            color: black;
         }
 
         .contact p {
@@ -273,10 +311,6 @@ export default function HomePage() {
             list-style: none;
             padding: 0;
             font-size: 1vw;
-        }
-
-        .Banner h2 {
-            font-size: 2vw;
         }
 
         .carousel-inner {
