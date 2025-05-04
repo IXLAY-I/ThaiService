@@ -39,40 +39,41 @@ export default function ReviewPage() {
           <li><a className="hidetext" href="/homepage">Homepage</a></li>
           <li><a className="hidetext" href="/review">Review</a></li>
           <li><a className="hidetext" onClick={() => window.logout()} href="/login">Log out</a></li>
-          <li className="menu-button" onClick={() => window.showSidebar()}>
+          {/* <li className="menu-button" onClick={() => window.showSidebar()}>
             <a>
               <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#5f6368">
                 <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>
               </svg>
             </a>
-          </li>
+          </li> */}
         </ul>
       </nav>
-
-      <div className="BoxForumMain">
-        <div className="Forum">
-          <table id="myTable" className="section-room">
-            <thead>
-              <tr><th>ความคิดเห็นทั้งหมด</th></tr>
-            </thead>
-            <tbody>
-              {[
-                "ข้าวอร่อยห้องน้ำสะอาด",
-                "Halloween จุ๊กกรู๊ววว",
-                "Soap land ประเทศไทย",
-                "งานพรีเมี่ยม",
-                "กลิ่นหอม รสชาติโอเคครับ",
-                "ติดใจครับ",
-                "คุ้มค่าครับ บริการเหนือความคาดหวังผมชื่อ",
-                "ahh",
-                "เตียงนิ่ม"
-              ].map((text, index) => (
-                <tr key={index}><td>{text}</td></tr>
-              ))}
-            </tbody>
-          </table>
+      <main>
+        <div className="BoxForumMain">
+          <div className="Forum">
+            <table id="myTable" className="section-room">
+              <thead>
+                <tr><th>ความคิดเห็นทั้งหมด</th></tr>
+              </thead>
+              <tbody>
+                {[
+                  "ข้าวอร่อยห้องน้ำสะอาด",
+                  "Halloween จุ๊กกรู๊ววว",
+                  "Soap land ประเทศไทย",
+                  "งานพรีเมี่ยม",
+                  "กลิ่นหอม รสชาติโอเคครับ",
+                  "ติดใจครับ",
+                  "คุ้มค่าครับ บริการเหนือความคาดหวังผมชื่อ",
+                  "ahh",
+                  "เตียงนิ่ม"
+                ].map((text, index) => (
+                  <tr key={index}><td>{text}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </main>
       <style jsx>{`
         * {
           margin: 0;
@@ -100,7 +101,7 @@ export default function ReviewPage() {
         }
 
         nav li {
-          height: 70px;
+          height: 7vh;
         }
 
         nav a {
@@ -115,10 +116,6 @@ export default function ReviewPage() {
 
         nav ul:first-child a:hover {
           background-color: #f0f0f076;
-        }
-
-        nav a:hover {
-          background-color: rgb(255, 218, 34);
         }
 
         nav li:first-child {
@@ -150,6 +147,7 @@ export default function ReviewPage() {
         }
 
         .BoxForumMain {
+          height: 93vh;
           padding: 5vw;
           display: flex;
           justify-content: center;
