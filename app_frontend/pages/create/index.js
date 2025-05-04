@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useState } from 'react';
 
 export default function CreatePage() {
   const [formData, setFormData] = useState({
@@ -52,15 +53,15 @@ export default function CreatePage() {
           <div className="input_all">
             <div>
               <label>Username:</label>
-              <input type="text" value={formData.username} onChange={handleChange} />
+              <input type="text" name="username" value={formData.username} onChange={handleChange} />
             </div>
             <div>
               <label>Email:</label>
-              <input type="text" value={formData.email} onChange={handleChange} />
+              <input type="text" name="email" value={formData.email} onChange={handleChange} />
             </div>
             <div>
               <label>Password:</label>
-              <input type="password" value={formData.password} onChange={handleChange} />
+              <input type="password" name="password" value={formData.password} onChange={handleChange} />
             </div>
           </div>
           <div className="action">
