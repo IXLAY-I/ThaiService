@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from user_management.models import Useri
 from user_management.serializers import UserSerializer
+from user_management.serializers import Review_ShopSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,6 +12,7 @@ from django.contrib.auth.models import User
 from .serializers import ProductSerializer
 from .models import Product
 from rest_framework.generics import RetrieveAPIView
+from .models import Review_Shop
 @csrf_exempt
 def register(request):
     if request.method == "POST":
@@ -52,3 +54,9 @@ class ProductListView(APIView):
 class ProductDetailView(RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+class ReviewListView(APIView):
+    def get(self, request):
+        reviews = Review_Shop.objects.all()
+        review_serializer = Review_ShopSerializer(reviews, many=True)
+        return Response(review_serializer.data)

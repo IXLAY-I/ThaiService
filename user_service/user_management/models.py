@@ -23,7 +23,6 @@ class Review_Shop(models.Model):
 
 
 class Product(models.Model):
-    # image_url = models.CharField(max_length=200)
     product_name = models.CharField(max_length=200)
     status = models.BooleanField(default=True)
     point = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
@@ -47,11 +46,18 @@ class Review(models.Model):
 
 class Product_detail(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_details', null=True, blank=True)
-    location = models.CharField(max_length=200)
+    location = models.CharField(max_length=200, blank=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2 , default=0.00)
+    habit = models.CharField(max_length=200, blank=True)
+    like = models.CharField(max_length=200, blank=True)
+    ability = models.CharField(max_length=200, blank=True)
 
+    def save(self, *args, **kwargs):
+        if self.product_id and (self.total_price == 0 or self.total_price is None):
+            self.total_price = self.product_id.price
+        super().save(*args, **kwargs)
     def __str__(self):
-        return self.name
+        return f'{self.product_id.product_name} detail'
 
 
 class Payment(models.Model):

@@ -2,45 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* กำหนดสีพื้นหลังและฟอนต์สำหรับทุกโหมด (default: ขาว-ดำ) */
 :root {
-  --foreground-rgb: 0, 0, 0; /* ฟอนต์สีดำ */
-  --background-start-rgb: 255, 255, 255; /* พื้นหลังสีขาว */
-  --background-end-rgb: 255, 255, 255; /* พื้นหลังสีขาว */
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
-/* โหมด Dark Mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 0, 0, 0; /* ฟอนต์สีขาว */
-    --background-start-rgb: 0, 0, 0; /* พื้นหลังสีดำ */
-    --background-end-rgb: 0, 0, 0; /* พื้นหลังสีดำ */
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb)); /* ฟอนต์ */
-  background: rgb(var(--background-start-rgb)); /* พื้นหลังสีขาว */
+  color: rgb(var(--foreground-rgb));
   background: linear-gradient(
-    to bottom,
-    transparent,
-    rgb(var(--background-end-rgb))
-  ); /* ใช้ gradient สำหรับพื้นหลัง */
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
-/* การตั้งค่าความเหมาะสมสำหรับหน้าจอเล็ก */
-@media (max-width: 768px) {
-  .content {
-    flex-direction: column;
-  }
-
-  .contact,
-  .Banner {
-    flex: 0 0 100%;
-  }
-}
-
-/* เพิ่มคลาสที่ต้องการสำหรับ utilities */
 @layer utilities {
   .text-balance {
     text-wrap: balance;

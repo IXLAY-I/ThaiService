@@ -2,51 +2,54 @@ from rest_framework import serializers
 from user_management.models import Useri
 from .models import Review_Shop, Product, Review, Product_detail, Payment
 
-# Serializer สำหรับ User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Useri
         fields = ['id', 'username', 'email']
 
-# Serializer สำหรับ Review_Shop
 class Review_ShopSerializer(serializers.ModelSerializer):
-    userid = UserSerializer()  # เพิ่ม serializer สำหรับ User เพื่อให้ได้ข้อมูลของผู้ใช้
+    userid = UserSerializer() 
     class Meta:
         model = Review_Shop
         fields = ['id', 'userid', 'comment']
 
-# Serializer สำหรับ Product
+class Product_detailMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product_detail
+        fields = ['location', 'total_price', 'habit', 'ability', 'like']
+
+
 class ProductSerializer(serializers.ModelSerializer):
     latest_rating = serializers.SerializerMethodField()
+    product_details = Product_detailMiniSerializer(many=True, read_only=True) 
+    
     class Meta:
         model = Product
-        fields = ['id', 'product_name', 'status', 'point', 'price', 'top', 'image', 'latest_rating']
+        fields = ['id', 'product_name', 'status', 'point', 'price', 'top', 'image', 'latest_rating', 'product_details']
     def get_latest_rating(self, obj):
         latest_review = obj.product_reviews.order_by('-id').first()
         return latest_review.rating if latest_review else None
-
-# Serializer สำหรับ Review
+    
 class ReviewSerializer(serializers.ModelSerializer):
-    product_id = ProductSerializer()  # ใช้ ProductSerializer เพื่อแสดงข้อมูลของ product ที่เกี่ยวข้อง
-    user_id = UserSerializer()  # ใช้ UserSerializer เพื่อแสดงข้อมูลของ user ที่เกี่ยวข้อง
+    product_id = ProductSerializer()  
+    user_id = UserSerializer() 
     
     class Meta:
         model = Review
         fields = ['id', 'product_id', 'user_id', 'rating']
 
-# Serializer สำหรับ Product_detail
 class Product_detailSerializer(serializers.ModelSerializer):
-    product_id = ProductSerializer()  # ใช้ ProductSerializer เพื่อแสดงข้อมูลของ product ที่เกี่ยวข้อง
+    product_id = ProductSerializer()  
     
     class Meta:
         model = Product_detail
-        fields = ['id', 'product_id', 'location', 'total_price']
+        fields = ['id', 'product_id', 'location', 'total_price', 'habit', 'ability', 'like']
 
-# Serializer สำหรับ Payment
 class PaymentSerializer(serializers.ModelSerializer):
-    userid = UserSerializer()  # ใช้ UserSerializer เพื่อแสดงข้อมูลของ user ที่เกี่ยวข้อง
-    Product_detail_id = Product_detailSerializer()  # ใช้ Product_detailSerializer เพื่อแสดงข้อมูลของ product_detail ที่เกี่ยวข้อง
+    userid = UserSerializer()
+    Product_detail_id = Product_detailSerializer()
 
     class Meta:
         model = Payment
         fields = ['id', 'userid', 'Product_detail_id', 'status', 'payment_method', 'total_price']
+

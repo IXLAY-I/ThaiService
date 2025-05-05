@@ -98,21 +98,11 @@ const filteredData = products.filter(emp =>
         <div className="middle">
             <h1>Top Employees</h1>
             <div className="pic_top">
-                <div>
-                    <img src="/img/top1.png" style={{ width: '8vw' }} />
-                </div>
-                <div>
-                    <img src="/img/top2.png" style={{ width: '8vw' }} />
-                </div>
-                <div>
-                    <img src="/img/top3.png" style={{ width: '8vw' }} />
-                </div>
-                <div>
-                    <img src="/img/top4.png" style={{ width: '8vw' }} />
-                </div>
-                <div>
-                    <img src="/img/top5.png" style={{ width: '8vw' }} />
-                </div>
+            {products.filter(p => p.top).map((product, idx) => (
+              <div key={product.id}>
+                <img src={`http://localhost:3342${product.image}`} alt={product.product_name} style={{ width: '8vw' }} />
+              </div>
+              ))}
             </div>
         </div>
 

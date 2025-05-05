@@ -6,15 +6,18 @@ export async function getServerSideProps(context) {
   const res = await fetch(`http://localhost:3342/api/product/${id}/`);
   const product = await res.json();
   const pricePerHour = product.price;
+  const detail = product.product_details?.[0] || null;
+
   return {
     props: {
       pricePerHour,
       product,
+      detail,
     },
   };
 }
 
-export default function DetailsPage({ product, pricePerHour }) {
+export default function DetailsPage({ product, pricePerHour , detail }) {
   const [duration, setDuration] = useState(0);
   const [location, setLocation] = useState("สถานที่จัดเตรียมไว้");
   const [totalPrice, setTotalPrice] = useState(0);
@@ -68,18 +71,18 @@ export default function DetailsPage({ product, pricePerHour }) {
               <div className="w-1/2 flex flex-col justify-between">
               <h1 className="text-[2vw] text-center font-semibold">{product.product_name}</h1>
 
-                <div className="px-[4vw] text-[1vw] flex flex-col gap-2">
+                <div className="px-[4vw] text-[1vw] flex flex-col gap-2"> 
                   <div>
                     <label>นิสัย:</label>
-                    <p>น่ารัก, เอาใจเก่ง, ไม่งี้เง่า, อารมณ์ดี</p>
+                    <p>{detail?.habit || "ไม่มีข้อมูล"}</p>
                   </div>
                   <div>
                     <label>สิ่งที่ชอบ:</label>
-                    <p>ของหวาน, อ่านนิยาย</p>
+                    <p>{detail?.like || "ไม่มีข้อมูล"}</p>
                   </div>
                   <div>
                     <label>ความสามารถ:</label>
-                    <p>ทำงานบ้านได้, ทำอาหารอร่อย</p>
+                    <p>{detail?.ability || "ไม่มีข้อมูล"}</p>
                   </div>
                   <div>
                     <label>สถานที่:</label>

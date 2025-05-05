@@ -1,7 +1,9 @@
 import Head from 'next/head';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ReviewPage() {
+  const [reviews, setReviews] = useState([]);
+ 
   useEffect(() => {
     // window.showSidebar = function () {
     //   document.querySelector('.sidebar').style.display = 'flex';
@@ -9,10 +11,17 @@ export default function ReviewPage() {
     // window.hideSidebar = function () {
     //   document.querySelector('.sidebar').style.display = 'none';
     // };
+    fetch('http://localhost:3342/api/review/')  // ปรับ URL ตามจริง
+      .then(res => res.json())
+      .then(data => setReviews(data));
     window.logout = function () {
       alert('Logged out!');
     };
   }, []);
+
+const filteredData = reviews.filter(emp =>
+    emp.comment && emp.product_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <>
