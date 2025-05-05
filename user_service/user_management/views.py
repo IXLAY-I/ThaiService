@@ -2,52 +2,53 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from django.contrib.auth.models import User
-from user_management.models import Customer
-from user_management.serializers import CustomerSerializer
+from user_management.models import Useri
+from user_management.serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib import messages
-from rest_framework import viewsets
-from .models import Employee
-from .serializers import EmployeeSerializer
-
+from django.contrib.auth.models import User
+from .serializers import ProductSerializer
+from .models import Product
+from rest_framework.generics import RetrieveAPIView
 @csrf_exempt
 def register(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
+        if 'username' not in data or 'password' not in data or 'email' not in data:
+            return JsonResponse({"error": "Missing username, password, or email."}, status=400)
         try:
-            new_user = User.objects.create_user(username=data['username'], password=data['password'])
-        except:
-            return JsonResponse({"error":"username already used."}, status=400)
-        new_user.save()
-        data['user'] = new_user.id
-        customer_serializer = CustomerSerializer(data=data)
-        if customer_serializer.is_valid():
-            customer_serializer.save()
-            return JsonResponse(customer_serializer.data, status=201)
-        new_user.delete()
-        return JsonResponse({"error":"data not valid"}, status=400)
+           user = User.objects.create_user(
+                username=data['username'],
+                password=data['password'],
+                email=data['email']
+            )
+        except Exception as e:
+            return JsonResponse({"message": "username already used."}, status=400)
+    
+        useri = Useri(username=user, email=data['email'])
+        useri.save()
+        
+        serializer = UserSerializer(useri)
+        return JsonResponse(serializer.data, status=201)
     return JsonResponse({"error":"method not allowed."}, status=405)
 
-class CustomerView(APIView):
+class UserView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format=None):
-        customer_data = Customer.objects.get(user=request.user)
-        customer_serializer = CustomerSerializer(customer_data)
+        User_data = Useri.objects.get(id=request.user.id)
+        user_serializer = UserSerializer(User_data)
         content = {
-        'data': customer_serializer.data
+        'data': user_serializer.data
         }
         return Response(content)
     
-class EmployeeViewSet(viewsets.ModelViewSet):
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
-    
-
-class EmployeeListView(APIView):
-    def get(self, request, format=None):
-        employees = Employee.objects.all()
-        serializer = EmployeeSerializer(employees, many=True)
+class ProductListView(APIView):
+    def get(self, request):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
+    
+class ProductDetailView(RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer

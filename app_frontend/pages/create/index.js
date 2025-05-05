@@ -22,7 +22,7 @@ export default function CreatePage() {
     }
 
     try {
-      const response = await fetch('http://localhost:3342/api/register/', {
+      const response = await fetch('http://localhost:3342/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

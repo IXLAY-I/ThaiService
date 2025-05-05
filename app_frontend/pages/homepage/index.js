@@ -1,20 +1,20 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link'; 
 
 export default function HomePage() {
+const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  useEffect(() => {
+    // ดึงข้อมูลจาก Django API
+    fetch('http://localhost:3342/api/product/')  // ปรับ URL ตามจริง
+      .then(res => res.json())
+      .then(data => setProducts(data));
+  }, []);
 
-  const tableData = [
-    { img: '/img/somchai.png', name: 'สมชาย', status: 'ไม่ว่าง', review: '5/5', price: '5000฿' },
-    { img: '/img/sommai.png', name: 'สมหมาย', status: 'ว่าง', review: '5/5', price: '2000฿' },
-    { img: '/img/somsri.png', name: 'สมศรี', status: 'ว่าง', review: '4.9/5', price: '3500฿' },
-  ];
-
-  const filteredData = tableData.filter(row =>
-    Object.values(row).some(val =>
-      val.toLowerCase ? val.toLowerCase().includes(searchTerm.toLowerCase()) : false
-    )
+const filteredData = products.filter(emp =>
+    emp.product_name && emp.product_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -169,14 +169,16 @@ export default function HomePage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredData.map((employee, index) => (
-                    <tr key={index}>
-                      <td><img className="list_image" src={employee.img} alt={employee.name} /></td>
-                      <td>{employee.name}</td>
-                      <td>{employee.status}</td>
-                      <td>{employee.review}</td>
-                      <td>{employee.price}</td>
-                    </tr>
+                  {filteredData.map((product, index) => ( //this here                        
+                    <tr key={index}> 
+                    <Link key={index} href={`/details/${product.id}`}>  {/* Link to product detail page */}             
+                      <td><img className="list_image" src={`http://127.0.0.1:3342${product.image}`} alt={product.product_name} /></td>
+                      </Link>
+                      <td>{product.product_name}</td>
+                      <td>{product.status ? "ว่าง" : "ไม่ว่าง"}</td>
+                      <td>{product.latest_rating ?? "ยังไม่มีรีวิว"}</td>
+                      <td>{product.price}</td>                           
+                    </tr>                            
                   ))}
                 </tbody>
               </table>

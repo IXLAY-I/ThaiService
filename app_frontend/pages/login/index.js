@@ -1,9 +1,11 @@
 import Head from 'next/head';
 import { useState } from 'react';
-
+import { useRouter } from 'next/router';
 export default function Login() {
+    const router = useRouter();
     async function onLogin(event) {
         event.preventDefault();
+        
         const formData = new FormData(event.target);
         const response = await fetch('http://localhost:3342/api/token/', {
             method: 'POST',
@@ -19,6 +21,7 @@ export default function Login() {
             const data = await response.json();
             localStorage.setItem('jwt_access', data.access);
             alert("Login success!");
+            router.push('/homepage');
         } else {
             alert("Your username/password are incorrect!");
         }

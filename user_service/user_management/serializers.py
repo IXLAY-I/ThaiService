@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from user_management.models import User
+from user_management.models import Useri
 from .models import Review_Shop, Product, Review, Product_detail, Payment
 
 # Serializer สำหรับ User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Useri
         fields = ['id', 'username', 'email']
 
 # Serializer สำหรับ Review_Shop
@@ -17,9 +17,13 @@ class Review_ShopSerializer(serializers.ModelSerializer):
 
 # Serializer สำหรับ Product
 class ProductSerializer(serializers.ModelSerializer):
+    latest_rating = serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = ['id', 'product_name', 'status', 'point', 'price', 'top', 'image']
+        fields = ['id', 'product_name', 'status', 'point', 'price', 'top', 'image', 'latest_rating']
+    def get_latest_rating(self, obj):
+        latest_review = obj.product_reviews.order_by('-id').first()
+        return latest_review.rating if latest_review else None
 
 # Serializer สำหรับ Review
 class ReviewSerializer(serializers.ModelSerializer):

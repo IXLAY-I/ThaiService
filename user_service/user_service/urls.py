@@ -33,5 +33,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/myinfo', UserView.as_view(), name="myinfo"),
+    path('api/product/',ProductListView.as_view(), name="product-list"),
+    path('api/product/<int:pk>/', ProductDetailView.as_view(), name="product-detail"),
     # path('api/employees/', EmployeeListView.as_view(), name='employee-list'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
