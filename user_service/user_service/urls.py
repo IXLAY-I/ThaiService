@@ -21,20 +21,26 @@ from user_management import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
+
 from rest_framework_simplejwt.views import (
  TokenObtainPairView,
  TokenRefreshView,
+ 
 )
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/register', register),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path("api/token/", MyTokenView.as_view(), name="token_obtain_pair"),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/myinfo', UserView.as_view(), name="myinfo"),
     path('api/product/',ProductListView.as_view(), name="product-list"),
     path('api/product/<int:pk>/', ProductDetailView.as_view(), name="product-detail"),
+    path('api/payment/<int:pk>/', PaymentDetailView.as_view(), name="payment-detail"),
     path('api/review/',ReviewListView.as_view(), name="review-list"),
-    # path('api/employees/', EmployeeListView.as_view(), name='employee-list'),
+    path('api/payment/', create_payment),
+    path('api/user/', views.UserView.as_view(), name='user-list'),
+    path('api/submit-rating/', rating_view, name='submit_rating'),
+    path('api/reviewshop/create/', CreateReviewView.as_view(), name='create-review'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

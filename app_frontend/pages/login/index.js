@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { jwtDecode } from "jwt-decode";
+
 export default function Login() {
     const [isRegistering, setIsRegistering] = useState(false);
     const router = useRouter();
@@ -13,14 +15,21 @@ export default function Login() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                username: formData.get('email'),
+                email: formData.get('email'),
                 password: formData.get('password'),
             }),
         });
 
         if (response.ok) {
             const data = await response.json();
+            console.log("data:",data);
+
+            const decoded = jwtDecode(data.access);
+            const user_id = decoded.user_id;
+
             localStorage.setItem('jwt_access', data.access);
+            localStorage.setItem('token', data.access);
+            localStorage.setItem('user_id', user_id)
             alert('Login success!');
             router.push('/homepage');
         } else {
@@ -32,13 +41,13 @@ export default function Login() {
         e.preventDefault();
         const formData = new FormData(e.target);
 
-        const response = await fetch('http://localhost:3342/api/register/', {
+        const response = await fetch('http://localhost:3342/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                username: formData.get('email'),
+                email: formData.get('email'),
                 password: formData.get('password'),
-                name: formData.get('name'),
+                username: formData.get('username'),
             }),
         });
 
@@ -66,7 +75,7 @@ export default function Login() {
                     <div className="form-container register-container">
                         <form onSubmit={handleRegister}>
                             <h1>Register</h1>
-                            <input type="text" name="name" placeholder="Name" required />
+                            <input type="text" name="username" placeholder="Name" required />
                             <input type="email" name="email" placeholder="Email" required />
                             <input type="password" name="password" placeholder="Password" required />
                             <button type="submit">Register</button>

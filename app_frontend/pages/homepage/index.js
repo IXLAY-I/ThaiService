@@ -6,17 +6,51 @@ import Link from 'next/link';
 export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [comment, setComment] = useState('');
   useEffect(() => {
     fetch('http://localhost:3342/api/product/')
       .then(res => res.json())
       .then(data => setProducts(data));
+      window.logout = () => {
+        localStorage.clear(); 
+        window.location.href = '/login'; 
+      };
   }, []);
 
   const filteredData = products.filter(emp =>
     emp.product_name && emp.product_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+  const handleReviewSubmit = async () => {
+    const token = localStorage.getItem('token'); 
+    const user_id = localStorage.getItem('user_id');
+    console.log("token: ",token);
+    console.log("Comment:", comment);
+    console.log("User id:", user_id);
+    try {
+      const response = await fetch('http://localhost:3342/api/reviewshop/create/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          user_id: parseInt(user_id), 
+          comment: comment
+        })
+      });
+    
+      const data = await response.json();
+      if (response.ok) {
+        alert("Review submitted successfully!");
+        setComment('');
+      } else {
+        console.error("Submit failed:", data);
+        alert("Failed to submit review: " + JSON.stringify(data));
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+    }
+  };
   return (
     <>
       <Head>
@@ -29,22 +63,38 @@ export default function HomePage() {
       </Head>
 
       <nav className="bg-gradient-to-r from-purple-700 to-indigo-600 shadow-xl sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link href="/" className="text-3xl font-extrabold text-white tracking-tight">ThaiService</Link>
-          <ul className="flex space-x-8">
-            {['Homepage', 'Review', 'Log out'].map((item, idx) => (
-              <li key={idx} className="group">
-                <Link
-                  href={item === 'Log out' ? '/login' : `/${item.toLowerCase()}`}
-                  className="text-white text-lg font-medium hover:text-yellow-300 transition duration-300 ease-in-out group-hover:scale-105"
-                >
-                  {item}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
+  <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <Link href="/" className="text-3xl font-extrabold text-white tracking-tight">
+      ThaiService
+    </Link>
+    <ul className="flex space-x-8">
+      {['Homepage', 'Review', 'Log out'].map((item, idx) => (
+        <li key={idx} className="group">
+          {/* เช็คว่าเป็น 'Log out' หรือไม่ ถ้าใช่ ให้ใช้ onClick เพื่อ logout */}
+          {item === 'Log out' ? (
+            <button
+              onClick={() => {
+                localStorage.clear();  // ล้างข้อมูลใน localStorage
+                window.location.href = '/login';  // รีไดเรกไปที่หน้า login
+              }}
+              className="text-white text-lg font-medium hover:text-yellow-300 transition duration-300 ease-in-out group-hover:scale-105"
+            >
+              {item}
+            </button>
+          ) : (
+            <Link
+              href={`/${item.toLowerCase()}`}
+              className="text-white text-lg font-medium hover:text-yellow-300 transition duration-300 ease-in-out group-hover:scale-105"
+            >
+              {item}
+            </Link>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
 
       <main className="container mx-auto mt-10 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
@@ -52,10 +102,14 @@ export default function HomePage() {
             <h3 className="text-2xl font-bold text-gray-800 mb-4">Contact Us</h3>
             <p className="text-gray-600 mb-6">Premium services starting at just 1,000 THB</p>
             <input
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
               className="w-full p-4 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
               placeholder="Write your review"
             />
-            <button className="w-full bg-purple-600 text-white p-4 rounded-lg hover:bg-purple-700 transition duration-300 flex items-center justify-center">
+            <button 
+              onClick={handleReviewSubmit}
+              className="w-full bg-purple-600 text-white p-4 rounded-lg hover:bg-purple-700 transition duration-300 flex items-center justify-center">
               <i className="bi bi-envelope mr-2"></i> Submit Review
             </button>
             <ul className="mt-6 text-gray-600 space-y-3">
@@ -176,7 +230,9 @@ export default function HomePage() {
                     </td>
                     <td className="p-4">{product.product_name}</td>
                     <td className="p-4">{product.status ? "Available" : "Unavailable"}</td>
-                    <td className="p-4">{product.latest_rating ?? "No reviews"}</td>
+                    <td className="p-4">
+                       {Number(product.point) > 0 ? parseFloat(product.point).toString().replace(/\.0+$/, "") : "No reviews"}
+                    </td>
                     <td className="p-4">{product.price}</td>
                   </tr>
                 ))}

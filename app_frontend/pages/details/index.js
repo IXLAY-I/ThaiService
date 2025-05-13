@@ -2,21 +2,33 @@ import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export async function getServerSideProps() {
-  const pricePerHour = 5000;
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const res = await fetch(`http://localhost:3342/api/product/${id}/`);
+  const product = await res.json();
+  const productName = product.product_name;
+  const pricePerHour = product.price;
+  const productId = product.id;
+  const detail = product.product_details?.[0] || null;
   return {
     props: {
+      productId,
       pricePerHour,
+      product,
+      detail,
+      productName,
     },
   };
 }
-
-export default function DetailsPage({ pricePerHour }) {
+export default function DetailsPage({ product, pricePerHour , detail , productId}) {
   const [duration, setDuration] = useState(0);
   const [location, setLocation] = useState("สถานที่จัดเตรียมไว้");
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0); 0
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
+    const storedUserId = localStorage.getItem('user_id');
+    setUserId(storedUserId);
     let price = duration * pricePerHour;
     if (location === "บ้านคุณ(+1000฿)") {
       price += 1000;
@@ -28,20 +40,31 @@ export default function DetailsPage({ pricePerHour }) {
     e.preventDefault();
 
     const orderData = {
-      location,
-      duration,
-      totalPrice,
+      userid: userId,
+      Product_id: productId,
+      total_price: totalPrice
     };
-
+    
+    
+    console.log(product.id);
+    console.log("orderData:", orderData);
+   
     try {
-      const res = await fetch('/api/order', {
+      const res = await fetch('http://localhost:3342/api/payment/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('jwt_access')}`,
+         },
         body: JSON.stringify(orderData),
       });
 
-      if (!res.ok) throw new Error("ส่งข้อมูลล้มเหลว");
-      alert('ส่งข้อมูลสำเร็จแล้ว!');
+      if (!res.ok) {
+        const errorText = await res.text(); // ดึงข้อความจาก response
+        console.error("Error from API:", errorText);
+        throw new Error("ส่งข้อมูลล้มเหลว");
+      }
+      const payment = await res.json();
+      window.location.href = `/payment/${payment.id}`;
     } catch (error) {
       console.error(error);
       alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
@@ -83,26 +106,24 @@ export default function DetailsPage({ pricePerHour }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="relative overflow-hidden rounded-2xl">
                 <img
-                  src="/img/somchai.png"
-                  alt="Somchai"
-                  className="w-full h-full object-cover transform hover:scale-105 transition duration-500 ease-in-out"
+                  src={product.image} alt={product.product_name} className="w-full h-full object-cover transform hover:scale-105 transition duration-500 ease-in-out"
                 />
               </div>
               <div className="flex flex-col justify-between">
-                <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Somchai</h1>
+                <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">{product.product_name}</h1>
 
                 <div className="space-y-4 text-gray-700">
                   <div>
                     <label className="font-semibold">Personality:</label>
-                    <p className="text-gray-600">Charming, attentive, cheerful, never moody</p>
+                    <p className="text-gray-600">{detail?.habit || "ไม่มีข้อมูล"}</p>
                   </div>
                   <div>
                     <label className="font-semibold">Likes:</label>
-                    <p className="text-gray-600">Desserts, reading novels</p>
+                    <p className="text-gray-600">{detail?.like || "ไม่มีข้อมูล"}</p>
                   </div>
                   <div>
                     <label className="font-semibold">Skills:</label>
-                    <p className="text-gray-600">Housekeeping, excellent cooking</p>
+                    <p className="text-gray-600">{detail?.ability || "ไม่มีข้อมูล"}</p>
                   </div>
                   <div>
                     <label className="font-semibold">Location:</label>

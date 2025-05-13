@@ -15,11 +15,11 @@ class Useri(models.Model):
 
 
 class Review_Shop(models.Model):
-    userid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    userid = models.ForeignKey(Useri, on_delete=models.CASCADE)
     comment = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return f'Review by User ID {self.user_id}'
+        return f'Review by User ID {self.userid}'
 
 
 class Product(models.Model):
@@ -57,12 +57,12 @@ class Product_detail(models.Model):
             self.total_price = self.product_id.price
         super().save(*args, **kwargs)
     def __str__(self):
-        return f'{self.product_id.product_name} detail'
+        return f'{self.product_id.id} detail'
 
 
 class Payment(models.Model):
     userid = models.ForeignKey(Useri, on_delete=models.CASCADE, null=True, blank=True)
-    Product_detail_id = models.ForeignKey(Product_detail, on_delete=models.CASCADE, null=True, blank=True)
+    Product_id = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     status = models.BooleanField(default=False)
     payment_method = models.CharField(max_length=100)
     total_price = models.DecimalField(max_digits=10, decimal_places=2 , default=0.00)
@@ -72,6 +72,5 @@ class Payment(models.Model):
 
 @receiver(pre_save, sender=Payment)
 def update_payment_total_price(sender, instance, **kwargs):
-    if instance.product_detail_id:
-        # Set the total_price of Payment to be the same as the total_price of the related Product_detail
-        instance.total_price = instance.product_detail_id.total_price
+    if instance.total_price in [0, None] and instance.Product_detail_id:
+        instance.total_price = instance.Product_detail_id.total_price
