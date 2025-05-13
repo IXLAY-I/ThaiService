@@ -14,10 +14,7 @@ class Review_ShopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review_Shop
         fields = ['id', 'userid', 'comment']
-        extra_kwargs = {'userid': {'read_only': True}}
-
-
-        
+        extra_kwargs = {'userid': {'read_only': True}}  
 
 class Product_detailMiniSerializer(serializers.ModelSerializer):
     class Meta:

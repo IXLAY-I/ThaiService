@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-
+import Image from 'next/image';
 export async function getServerSideProps(context) {
   const { id } = context.params;
   const res = await fetch(`http://localhost:3342/api/product/${id}/`);

@@ -38,16 +38,6 @@ def register(request):
         serializer = UserSerializer(useri)
         return JsonResponse(serializer.data, status=201)
     return JsonResponse({"error":"method not allowed."}, status=405)
-
-class UserView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request, format=None):
-        User_data = Useri.objects.get(id=request.user.id)
-        user_serializer = UserSerializer(User_data)
-        content = {
-        'data': user_serializer.data
-        }
-        return Response(content)
     
 class ProductListView(APIView):
     def get(self, request):
@@ -75,7 +65,7 @@ from decimal import Decimal
 def create_payment(request):
     try:
         total_price = request.data.get("total_price")
-        product_id = request.data.get("Product_id")  # ใช้ id ของ Product
+        product_id = request.data.get("Product_id")
 
         if total_price is None or product_id is None:
             return Response({"error": "total_price and Product_id are required"}, status=400)
@@ -125,17 +115,15 @@ class MyTokenSerializer(TokenObtainPairSerializer):
 
         try:
             useri = Useri.objects.get(email=email)
-            user = useri.username  # username = OneToOneField to User
+            user = useri.username  
         except Useri.DoesNotExist:
             raise serializers.ValidationError("Invalid email or password.")
 
         if not user.check_password(password):
             raise serializers.ValidationError("Invalid email or password.")
 
-        # Don't call super().validate() because we want to override token generation
         refresh = RefreshToken.for_user(user)
         
-        # Inject custom claim (use Useri.id)
         refresh["user_id"] = useri.id
 
         return {
@@ -143,8 +131,6 @@ class MyTokenSerializer(TokenObtainPairSerializer):
             'access': str(refresh.access_token),
             'user_id': useri.id,
         }
-
-
 
 class MyTokenView(TokenObtainPairView):
     serializer_class = MyTokenSerializer
@@ -170,30 +156,25 @@ def rating_view(request):
 
 class CreateReviewView(APIView):
     def post(self, request):
-        # ตรวจสอบข้อมูลที่ส่งมา
         serializer = Review_ShopSerializer(data=request.data)
         if serializer.is_valid():
             try:
-                # ตรวจสอบว่า user_id ถูกส่งมาหรือไม่
                 user_id = request.data.get('user_id')
                 if not user_id:
                     return Response({"detail": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
 
                 try:
-                    user_id = int(user_id)  # แปลงให้เป็น int
+                    user_id = int(user_id)
                 except ValueError:
                     return Response({"detail": "Invalid User ID."}, status=status.HTTP_400_BAD_REQUEST)
 
-                # ตรวจสอบว่า user_id มีในฐานข้อมูลหรือไม่
                 try:
                     useri = Useri.objects.get(id=user_id)
                     print(useri)
                 except Useri.DoesNotExist:
                     return Response({"detail": f"Useri with ID {user_id} not found."}, status=status.HTTP_400_BAD_REQUEST)
 
-                # บันทึกข้อมูลรีวิว
-                # ส่ง `useri` ซึ่งเป็นอ็อบเจ็กต์ของ `Useri` ไปยัง serializer
-                serializer.save(userid=useri)  # ส่ง useri เป็นอ็อบเจ็กต์ของ Useri
+                serializer.save(userid=useri) 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             except Exception as e:
                 return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
